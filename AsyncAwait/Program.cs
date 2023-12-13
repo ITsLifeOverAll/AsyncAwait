@@ -1,23 +1,31 @@
 ﻿
-int threadCount = ThreadPool.ThreadCount;
-Console.WriteLine($"Thread Pool thread count: {threadCount}");
+namespace AsyncAwait;
 
-var thread = Thread.CurrentThread;
-Console.WriteLine($"Main thread Id: {thread.ManagedThreadId}");
-
-_ = await ExecuteAsync(1);
-
-threadCount = ThreadPool.ThreadCount;
-Console.WriteLine($"Thread Pool thread count: {threadCount}");
-return;
-
-// end of program
-
-async Task<int> ExecuteAsync(int num)
+internal class Program
 {
-    // await Task.Delay(500);
-    var result = await Task.FromResult(num);
-    var currentThread = Thread.CurrentThread;
-    Console.WriteLine($"{num,3} Thread Id: {currentThread.ManagedThreadId}");
-    return result;
+    public static async Task Main(string[] args)
+    {
+        var contentLength = await GetUrlContentLengthAsync();
+        Console.WriteLine("Length: " + contentLength);
+        Console.WriteLine("thread count: {0}", ThreadPool.ThreadCount);
+    }
+    
+    static async Task<int> GetUrlContentLengthAsync()
+    {
+        var client = new HttpClient();
+    
+        Task<string> getStringTask =
+            client.GetStringAsync("https://learn.microsoft.com/dotnet");
+    
+        DoIndependentWork();
+    
+        string contents = await getStringTask;
+    
+        return contents.Length;
+    }
+    
+    static void DoIndependentWork()
+    {
+        Console.WriteLine("Working...");
+    }
 }
