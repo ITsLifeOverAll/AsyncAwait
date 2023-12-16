@@ -1,8 +1,8 @@
-AsyncAwait ±Ğ¾Ç±M®×
+AsyncAwait æ•™å­¸å°ˆæ¡ˆ
 ==============
 
-³o­Ó±M®×¬O ITsLifeOverAll ªº TAP (task-based asynchronous pattern) ¨t¦C¼v¤ù±Ğ¾Çªº­ì©lµ{¦¡½X¡C
+é€™å€‹å°ˆæ¡ˆæ˜¯ ITsLifeOverAll çš„ TAP (task-based asynchronous pattern) ç³»åˆ—å½±ç‰‡æ•™å­¸çš„åŸå§‹ç¨‹å¼ç¢¼ã€‚
 
-- async awiat ¤Jªù 
+- [async awiat å…¥é–€](https://youtu.be/6uTJgGa37FE)
 
-.Net 6 (C# 10) ¥H¤W¾A¥Î¡C
+.Net 6 (C# 10) ä»¥ä¸Šé©ç”¨ã€‚
