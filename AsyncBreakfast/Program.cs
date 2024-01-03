@@ -8,21 +8,29 @@ namespace AsyncBreakfast;
 
 internal class Program
 {
-    static void Main(string[] args)
+    static async Task Main(string[] args)
     {
         var stopwatch = Stopwatch.StartNew();
 
-        Coffee cup = PourCoffee();                  // 0 secs.
+        Coffee cup = PourCoffee();
         Console.WriteLine("coffee is ready");
         Console.WriteLine();
 
-        Egg eggs = FryEggs(2);                      // 6 secs
-        Console.WriteLine("eggs are ready");
-        Console.WriteLine();
+        var eggsTask = FryEggsAsync(2);
+        var toastTask = ToastBreadAsync(3);
 
-        Toast toast = ToastBread(2);                // 3 secs.
-        Console.WriteLine("toast is ready");
-        Console.WriteLine();
+        var tasks = Task.WhenAll(eggsTask, toastTask);
+        try
+        {
+            //Task.WaitAll(eggsTask, toastTask);
+
+            await tasks;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine("== awaited exception ==");
+                Console.WriteLine(e);
+        }
 
         Console.WriteLine("Breakfast is ready!");
         
@@ -43,6 +51,32 @@ internal class Program
         return new Toast();
     }
 
+    private static Task<Toast> ToastBreadAsync(int slices)
+    {
+        if (slices > 2)
+            throw new ArgumentException(
+                "slices must be less than 3",
+                nameof(slices));
+
+        return ToastBreadAsyncCore(slices);
+
+        static async Task<Toast> ToastBreadAsyncCore(int slices)
+        {
+            for (int slice = 0; slice < slices; slice++)
+            {
+                Console.WriteLine("Putting a slice of bread in the toaster");
+            }
+            Console.WriteLine("Start toasting...");
+
+            await Task.Delay(500);
+            Console.WriteLine("Remove toast from toaster");
+
+            throw new Exception("土司烤焦了 ...");
+
+            return new Toast();
+        }
+    }
+
     private static Egg FryEggs(int howMany)
     {
         Console.WriteLine("Warming the egg pan...");
@@ -56,7 +90,22 @@ internal class Program
 
         return new Egg();
     }
+    
+    private static async Task<Egg> FryEggsAsync(int howMany)
+    {
+        Console.WriteLine("Warming the egg pan...");
 
+        //await Task.Delay(3000);
+        Console.WriteLine($"cracking {howMany} eggs");
+        Console.WriteLine("cooking the eggs ...");
+
+        await Task.Delay(1000);
+        Console.WriteLine("Put eggs on plate");
+
+        throw new Exception("蛋掉在地上了 ...");
+
+        return new Egg();
+    }
     private static Coffee PourCoffee()
     {
         Console.WriteLine("Pouring coffee");
